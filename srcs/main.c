@@ -1,39 +1,32 @@
 #include "header.h"
 
-// [ DEBUG ]
-void	print_philos(const t_philo	*philos, size_t	count)
+int main(int argc, char	**argv)
 {
-	printf("Philos\n");
-	for (size_t i = 0; i < count; ++i)
-		printf("Philo №%ld:\nLeft: %ld\nRight: %ld\n\n", philos[i].id, philos[i].left_fork, philos[i].right_fork);
-}
-
-int main(void)
-{
-	pthread_t	*threads;
-	t_philo		*philos = NULL;
-	t_main 		main;
+	t_main 		*main;
+	t_settings	settings;
 	size_t 		i;
 
-	ft_main_initial(&main);
-	ft_initial_philos(&philos, main.settings->count_philo);
-	//print_philos(philos, main.settings->count_philo);
-	threads	= (pthread_t *)malloc(main.settings->count_philo * sizeof(*threads));
+	main = NULL;
+	if (!ft_read_args(&settings, argc - 1, (const char **)++argv))
+		ft_fail(main, "Error\n", false);
+	if (!ft_fill(&main, &settings))
+		ft_fail(main, "Error\n", false);
 	i = 0;
-	while (i < main.settings->count_philo)
+	while (i < main[0].settings->count_philo)
 	{
-		main.adrs_philo = &philos[i];
-		//if (i == 0)
-		//	main.settings->start_time = GetCurrentTime();
-		check(pthread_create(&threads[i], NULL, main_action, &main));
+		if (i == 0)
+			settings.start_time = GetCurrentTime();
+		check(pthread_create(&main->adrs_threads[i], NULL, main_action, &main[i]));
 		++i;
 	}
-
 	i = 0;
-	while (i < main.settings->count_philo)
+	while (i < main->settings->count_philo)
 	{
-		check(pthread_join(threads[i], NULL));
+		check(pthread_join(main->adrs_threads[i], NULL));
 		++i;
 	}
+	if (main->status->is_die)
+		printf("\033[91m[%llu] #%zu died\033[0m\n", GetDifferenceCurrentTimeMs(&main->settings->start_time)/*, GetDifferenceMs(&main->settings->start_time, &main->status->time_die)*/, main->status->id);
+	ft_success(main);
 	return (0);
 }
