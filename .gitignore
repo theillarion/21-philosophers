@@ -1,0 +1,11 @@
+#	Ignore all files
+*
+
+#	Not ignore certain files/folders
+!philo/
+!.gitignore
+!Makefile
+!*.h
+!*.c
+!includes/
+!srcs/
