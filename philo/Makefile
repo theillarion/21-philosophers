@@ -1,15 +1,25 @@
-NAME		=	test
+NAME		=	philo
 NAME_D		=	${NAME}_debug
 
-CC			=	clang
+CC			=	cc
 FLAGS		=	-Wall -Werror -Wextra
 FLAGS_D		=	-g
 
-LINK		=	-lpthread -fsanitize=thread
+LIB_NAME		=	libqueue.a
+LIB_NAME_D		=	libqueue_debug.a
+LIB_NAME_S		=	queue
+LIB_NAME_S_D	=	queue_debug
+LIB_PATH		=	libs/queue/
+LIB				=	$(LIB_PATH)$(LIB_NAME)
+LIB_D			=	$(LIB_PATH)$(LIB_NAME_D)
+
+LINK		=	-lpthread# -fsanitize=thread
+LINK_LIB	=	-l$(LIB_NAME_S) -L$(LIB_PATH)
+LINK_LIB_D	=	-l$(LIB_NAME_S_D) -L$(LIB_PATH)
 
 SRCS		=	$(addprefix srcs/,\
 					main.c exit.c time.c fill.c initial.c deinitial.c check.c action.c utilities_int.c utilities_string.c validation.c\
-					debug.c)
+					debug.c print.c sleep.c utilities_queue.c)
 HEADERS		=	includes/header.h includes/time.h
 
 OBJS		=	${SRCS:%.c=%.o}
@@ -32,7 +42,7 @@ NEWLINE			=	\n
 				@printf "ready $(COLOR_LYELLOW)$@$(NOCOLOR)$(NEWLINE)"
 
 %_debug.o	:	%.c $(HEADERS)
-				@$(CC) ${INCLUDES} $(FLAGS_D) $(FLAGS) -c $< -o $@
+				@$(CC) ${INCLUDES} $(FLAGS_D) $(FLAGS) -DDEBUG_MODE -c $< -o $@
 				@printf "$(COLOR_LCYAN)build object$(NOCOLOR) [$(COLOR_LGREEN)info$(NOCOLOR)]: "
 				@printf "ready $(COLOR_LYELLOW)$@$(NOCOLOR)$(NEWLINE)"
 
@@ -42,23 +52,31 @@ all			:	$(NAME)
 
 debug		:	${NAME_D}
 
-$(NAME)		:	$(OBJS) $(HEADERS)
-				@$(CC) $(LINK) $(OBJS) -L$(LIB_PATH) -l$(LIB_NAME_S) -o $(NAME)
+$(NAME)		:	$(LIB) $(OBJS)
+				@$(CC) $(LINK) $(OBJS) $(LINK_LIB) -o $(NAME)
 				@printf "$(COLOR_LCYAN)link$(NOCOLOR) [$(COLOR_LGREEN)info$(NOCOLOR)]: "
 				@printf "ready $(COLOR_LYELLOW)$(NAME)$(NOCOLOR) for $(COLOR_LYELLOW)$(OS)$(NOCOLOR)$(NEWLINE)"
 
-$(NAME_D)	:	$(OBJS_D) $(HEADERS)
-				@$(CC) $(LINK) $(OBJS_D) -L$(LIB_PATH) -l$(LIB_NAME_S_D) -o $(NAME_D)
+$(NAME_D)	:	$(LIB_D) $(OBJS_D)
+				@$(CC) $(OBJS_D) $(LINK_LIB_D) -o $(NAME_D)
 				@printf "$(COLOR_LCYAN)link debug$(NOCOLOR) [$(COLOR_LGREEN)info$(NOCOLOR)]: "
 				@printf "ready $(COLOR_LYELLOW)$(NAME_D)$(NOCOLOR) for $(COLOR_LYELLOW)$(OS)$(NOCOLOR)$(NEWLINE)"
 
+$(LIB)		:
+				@$(MAKE) -C $(LIB_PATH)
+
+$(LIB_D)		:
+				@$(MAKE) debug -C $(LIB_PATH)
+
 clean		:	
 				@$(RM) $(OBJS) $(OBJS_D)
+				@$(MAKE) clean -C $(LIB_PATH)
 				@printf "$(COLOR_LCYAN)$@$(NOCOLOR) [$(COLOR_LGREEN)info$(NOCOLOR)]: "
 				@printf "ready $(COLOR_LYELLOW)$(NAME)$(NOCOLOR) for $(COLOR_LYELLOW)$(OS)$(NOCOLOR)$(NEWLINE)"
 
 fclean		:	clean
 				@$(RM) $(NAME) $(NAME_D)
+				@$(MAKE) fclean -C $(LIB_PATH)
 				@printf "$(COLOR_LCYAN)$@$(NOCOLOR) [$(COLOR_LGREEN)info$(NOCOLOR)]: "
 				@printf "ready $(COLOR_LYELLOW)$(NAME)$(NOCOLOR) for $(COLOR_LYELLOW)$(OS)$(NOCOLOR)$(NEWLINE)"
 
