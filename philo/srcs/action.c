@@ -4,15 +4,15 @@ void	ft_die(t_main	*env)
 {
 	if (env == NULL)
 		return;
-	check(pthread_mutex_lock(&env->mutexes->death));
+	ft_check_result(env, pthread_mutex_lock(&env->mutexes->death));
 	if (env->status->is_die)
 	{
-		check(pthread_mutex_unlock(&env->mutexes->death));
+		ft_check_result(env, pthread_mutex_unlock(&env->mutexes->death));
 		return;
 	}
 	env->status->is_die = true;
 	env->status->id = env->adrs_philo->id;
-	check(pthread_mutex_unlock(&env->mutexes->death));
+	ft_check_result(env, pthread_mutex_unlock(&env->mutexes->death));
 }
 
 bool	ft_think(t_main	*arg)
@@ -36,10 +36,10 @@ bool	ft_get_fork(t_main	*env, bool is_right_fork)
 	if (env == NULL)
 		return (false);
 	if (is_right_fork)
-		check(pthread_mutex_lock(
+		ft_check_result(env, pthread_mutex_lock(
 			&env->mutexes->fork[env->adrs_philo->right_fork]));
 	else
-		check(pthread_mutex_lock(
+		ft_check_result(env, pthread_mutex_lock(
 			&env->mutexes->fork[env->adrs_philo->left_fork]));
 	ft_print_info(env, "has taken a fork", "\033[95m");
 	if (env->status->is_die || ft_get_difference_time_now_ms(&env->adrs_philo->time_last_eat)
@@ -48,12 +48,12 @@ bool	ft_get_fork(t_main	*env, bool is_right_fork)
 		if (!env->status->is_die)
 			ft_die(env);
 		if (!is_right_fork)
-			check(pthread_mutex_unlock(
+			ft_check_result(env, pthread_mutex_unlock(
 				&env->mutexes->fork[env->adrs_philo->left_fork]));
-		check(pthread_mutex_unlock(
+		ft_check_result(env, pthread_mutex_unlock(
 			&env->mutexes->fork[env->adrs_philo->right_fork]));
-		check(pthread_mutex_unlock(&env->mutexes->all_forks));
-		check(pthread_mutex_unlock(&env->mutexes->queue));
+		ft_check_result(env, pthread_mutex_unlock(&env->mutexes->all_forks));
+		ft_check_result(env, pthread_mutex_unlock(&env->mutexes->queue));
 		return (false);
 	}
 	return (true);
@@ -67,23 +67,23 @@ bool	ft_get_forks(t_main	*env)
 	{
 		if (!env->status->is_die)
 			ft_die(env);
-		check(pthread_mutex_unlock(&env->mutexes->queue));
+		ft_check_result(env, pthread_mutex_unlock(&env->mutexes->queue));
 		return (false);
 	}
-	check(pthread_mutex_lock(&env->mutexes->all_forks));
+	ft_check_result(env, pthread_mutex_lock(&env->mutexes->all_forks));
 	if (!ft_get_fork(env, true))
 		return (false);
 	if (!ft_get_fork(env, false))
 		return (false);
-	check(pthread_mutex_unlock(&env->mutexes->all_forks));
+	ft_check_result(env, pthread_mutex_unlock(&env->mutexes->all_forks));
 	ft_my_push(&env->queue, env->adrs_philo->id);
-	check(pthread_mutex_unlock(&env->mutexes->queue));
+	ft_check_result(env, pthread_mutex_unlock(&env->mutexes->queue));
 	ft_print_info(env, "is eating", "\033[92m");
 	env->adrs_philo->time_last_eat = ft_get_now_time();
 	bool flag = ft_smart_sleep(env, env->settings->time_to_eat);
-	check(pthread_mutex_unlock(
+	ft_check_result(env, pthread_mutex_unlock(
 		&env->mutexes->fork[env->adrs_philo->left_fork]));
-	check(pthread_mutex_unlock(
+	ft_check_result(env, pthread_mutex_unlock(
 		&env->mutexes->fork[env->adrs_philo->right_fork]));
 	if (!flag)
 		ft_die(env);
@@ -114,10 +114,10 @@ bool	ft_eat(t_main	*arg)
 			ft_die(arg);
 			return (false);
 		}
-		check(pthread_mutex_lock(&arg->mutexes->queue));
+		ft_check_result(arg, pthread_mutex_lock(&arg->mutexes->queue));
 		if (ft_my_empty(&arg->queue))
 		{
-			check(pthread_mutex_unlock(&arg->mutexes->queue));
+			ft_check_result(arg, pthread_mutex_unlock(&arg->mutexes->queue));
 			return (false);
 		}
 		else if (ft_my_top(&arg->queue) == arg->adrs_philo->id
@@ -128,7 +128,7 @@ bool	ft_eat(t_main	*arg)
 		}
 		else
 		{
-			check(pthread_mutex_unlock(&arg->mutexes->queue));
+			ft_check_result(arg, pthread_mutex_unlock(&arg->mutexes->queue));
 			usleep(100);
 			continue;
 		}

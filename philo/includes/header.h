@@ -104,7 +104,7 @@ void	*main_action(void	*data);
 bool	ft_read_args(t_settings	*settings, size_t argc, const char	**argv);
 
 //		check.c
-void	check(int	code);
+void	ft_check_result(t_main	*env, int	code);
 
 //		main.c
 int		main(int argc, char	**argv);

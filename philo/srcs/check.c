@@ -5,12 +5,14 @@
 
 //	!!!	FORBIDDEN FUNCTION !!!
 
-void	check(int	code)
+void	ft_check_result(t_main	*env, int	code)
 {
 	if (code < 0)
 	{
+		pthread_mutex_lock(&env->mutexes->print);
 		write(STDERR_FILENO, RED, strlen(RED));
 		perror("Error: ");
 		write(STDERR_FILENO, END, strlen(END));
+		pthread_mutex_unlock(&env->mutexes->print);
 	}
 }

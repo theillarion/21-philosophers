@@ -8,14 +8,14 @@ void	ft_destroy_mutexes(t_mutexes	**mutexes, size_t count)
 		return;
 	i = 0;
 	while (i < count)
-		check(pthread_mutex_destroy(&(*mutexes)->fork[i++]));
+		pthread_mutex_destroy(&(*mutexes)->fork[i++]);
 	if ((*mutexes)->fork != NULL)
 		memset((*mutexes)->fork, 0, count * sizeof(*(*mutexes)->fork));
 	ft_smart_free((void **)&(*mutexes)->fork);
-	check(pthread_mutex_destroy(&(*mutexes)->queue));
-	check(pthread_mutex_destroy(&(*mutexes)->all_forks));
-	check(pthread_mutex_destroy(&(*mutexes)->print));
-	check(pthread_mutex_destroy(&(*mutexes)->death));
+	pthread_mutex_destroy(&(*mutexes)->queue);
+	pthread_mutex_destroy(&(*mutexes)->all_forks);
+	pthread_mutex_destroy(&(*mutexes)->print);
+	pthread_mutex_destroy(&(*mutexes)->death);
 	if (*mutexes != NULL)
 		memset(*mutexes, 0, sizeof(**mutexes));
 	ft_smart_free((void **)mutexes);

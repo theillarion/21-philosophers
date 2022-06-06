@@ -16,13 +16,13 @@ int main(int argc, char	**argv)
 	{
 		if (i == 0)
 			settings.start_time = ft_get_now_time();
-		check(pthread_create(&main->adrs_threads[i], NULL, main_action, &main[i]));
+		ft_check_result(main, pthread_create(&main->adrs_threads[i], NULL, main_action, &main[i]));
 		++i;
 	}
 	i = 0;
 	while (i < main->settings->count_philo)
 	{
-		check(pthread_join(main->adrs_threads[i], NULL));
+		ft_check_result(main, pthread_join(main->adrs_threads[i], NULL));
 		++i;
 	}
 	if (main->status->is_die)
