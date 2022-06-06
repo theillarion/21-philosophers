@@ -21,21 +21,6 @@ void	print_settings(const t_settings	*settings)
 		   settings->count_eat, settings->is_end);
 }
 
-void	print_critical(const t_critical	*critical, size_t count)
-{
-	size_t	i;
-
-	printf("\033[92mCritical\033[0m\nAddress: %p\n"
-		   "Address forks: %p\n",
-		   critical, critical->forks);
-	i = 0;
-	while (i < count)
-	{
-		printf("Fork #%zu\nIs used fork: %d\n", i, critical->forks[0].is_used[i]);
-		++i;
-	}
-}
-
 void	print_main(const t_main	*main)
 {
 	printf("\033[92mPhilo\033[0m\nAddress: %p\n"
@@ -43,6 +28,17 @@ void	print_main(const t_main	*main)
 		   main->adrs_philo, main->adrs_philo->id,
 		   main->adrs_philo->left_fork, main->adrs_philo->right_fork);
 	print_settings(main->settings);
-	print_critical(main->critical, main->settings->count_philo);
+}
 
+void	print_queue(const t_queue	**queue)
+{
+	t_node	*current;
+
+	current = (*queue)->head;
+	printf("Queue:\n");
+	while (current != NULL)
+	{
+		printf("%zu\n", *(size_t *)current->element);
+		current = current->next;
+	}
 }
