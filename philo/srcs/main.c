@@ -26,7 +26,7 @@ int main(int argc, char	**argv)
 		++i;
 	}
 	if (main->status->is_die)
-		ft_print_info(main, ft_get_difference_time_now_ms(&main->settings->start_time), main->status->id, "died", "\033[91m");
+		ft_print_died(main);
 	ft_success(main);
 	return (0);
 }
