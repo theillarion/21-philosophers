@@ -3,12 +3,15 @@
 
 # include <stdio.h>
 # include <stdlib.h>
-# include "time.h"
+# include <sys/time.h>
 # include <stdbool.h>
 # include <unistd.h>
 # include <string.h>
 # include <pthread.h>
 # include "../libs/queue/includes/queue.h"
+
+typedef struct timeval t_time;
+typedef unsigned long long t_u64int;
 
 typedef struct s_philo
 {
@@ -55,6 +58,12 @@ typedef struct s_main
 	t_mutexes		*mutexes;
 	t_queue			*queue;
 }					t_main;
+
+//			time.c
+t_u64int	ft_get_difference_time_ms(const struct timeval	*time1, const struct timeval	*time2);
+t_u64int	ft_get_difference_time_now_ms(const t_time	*time);
+t_time		ft_get_now_time();
+t_time		ft_copy_time(const t_time	*src);
 
 //		utilities.c
 void	ft_smart_free(void	**memory);

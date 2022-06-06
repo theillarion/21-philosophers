@@ -20,7 +20,7 @@ LINK_LIB_D	=	-l$(LIB_NAME_S_D) -L$(LIB_PATH)
 SRCS		=	$(addprefix srcs/,\
 					main.c exit.c time.c fill.c initial.c deinitial.c check.c action.c utilities_int.c utilities_string.c validation.c\
 					debug.c print.c utilities_queue.c utilities.c)
-HEADERS		=	includes/header.h includes/time.h
+HEADERS		=	includes/header.h
 
 OBJS		=	${SRCS:%.c=%.o}
 OBJS_D		=	${SRCS:%.c=%_debug.o}
