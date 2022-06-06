@@ -8,27 +8,16 @@
 # include <unistd.h>
 # include <string.h>
 # include <pthread.h>
-
-enum	e_state
-{
-	HUNGRY,
-	THINKING,
-	EATING,
-	SLEEPING,
-};
+# include "../libs/queue/includes/queue.h"
 
 typedef struct s_philo
 {
 	size_t	id;
 	size_t	left_fork;
 	size_t	right_fork;
+	size_t	count_iteration;
+	bool	is_infinity;
 }			t_philo;
-
-typedef struct s_forks
-{
-	pthread_mutex_t	*fork;
-	bool			*is_used;
-}					t_forks;
 
 typedef struct s_settings
 {
@@ -41,35 +30,46 @@ typedef struct s_settings
 	bool	is_end;
 }			t_settings;
 
-typedef struct s_critical
-{
-	t_forks			*forks;
-	bool			is_end_game;
-	pthread_mutex_t	mutex;
-}					t_critical;
-
 typedef	struct s_status
 {
 	bool			is_die;
 	size_t			id;
-	t_time			time_die;
-	pthread_mutex_t	mutex_status;
 }					t_status;
+
+typedef	struct s_mutexes
+{
+	pthread_mutex_t	queue;
+	pthread_mutex_t	death;
+	pthread_mutex_t	print;
+	pthread_mutex_t	all_forks;
+	pthread_mutex_t	*fork;
+}					t_mutexes;
 
 typedef struct s_main
 {
 	t_philo			*adrs_philo;
 	pthread_t		*adrs_threads;
-	t_status	*status;
-	void			*adrs_main_struct;
+	t_status		*status;
 	t_settings		*settings;
-	t_critical		*critical;
+	t_mutexes		*mutexes;
+	t_queue			*queue;
 }					t_main;
+
+//		utilities_queue.c
+void	ft_my_push(t_queue	**queue, size_t philo_id);
+size_t	ft_my_top(t_queue	**queue);
+bool	ft_my_empty(t_queue	**queue);
+
+//		print.c
+void	ft_print_info(t_main	*env, t_u64int time, size_t id, const char	*event,
+			const char	*color);
+//		sleep.c
+bool	ft_smart_sleep(t_main	*env, const t_time	*time_last_eat,
+			size_t sleep_milliseconds);
 
 //		debug.c
 void	print_philos(const t_philo	*philos, size_t	count);
 void	print_settings(const t_settings	*settings);
-void	print_critical(const t_critical	*critical, size_t count);
 void	print_main(const t_main	*main);
 
 //		utilities_int.c
