@@ -15,7 +15,7 @@ int main(int argc, char	**argv)
 	while (i < main[0].settings->count_philo)
 	{
 		if (i == 0)
-			settings.start_time = GetCurrentTime();
+			settings.start_time = ft_get_now_time();
 		check(pthread_create(&main->adrs_threads[i], NULL, main_action, &main[i]));
 		++i;
 	}
@@ -26,7 +26,7 @@ int main(int argc, char	**argv)
 		++i;
 	}
 	if (main->status->is_die)
-		printf("\033[91m[%llu] #%zu died\033[0m\n", GetDifferenceCurrentTimeMs(&main->settings->start_time)/*, GetDifferenceMs(&main->settings->start_time, &main->status->time_die)*/, main->status->id);
+		ft_print_info(main, ft_get_difference_time_now_ms(&main->settings->start_time), main->status->id, "died", "\033[91m");
 	ft_success(main);
 	return (0);
 }
