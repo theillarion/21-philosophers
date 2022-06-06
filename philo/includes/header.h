@@ -55,6 +55,11 @@ typedef struct s_main
 	t_queue			*queue;
 }					t_main;
 
+//		utilities.c
+void	ft_smart_free(void	**memory);
+bool	ft_smart_sleep(t_main	*env, const t_time	*time_last_eat,
+			size_t sleep_milliseconds);
+
 //		utilities_queue.c
 void	ft_my_push(t_queue	**queue, size_t philo_id);
 size_t	ft_my_top(t_queue	**queue);
@@ -63,9 +68,6 @@ bool	ft_my_empty(t_queue	**queue);
 //		print.c
 void	ft_print_info(t_main	*env, t_u64int time, size_t id, const char	*event,
 			const char	*color);
-//		sleep.c
-bool	ft_smart_sleep(t_main	*env, const t_time	*time_last_eat,
-			size_t sleep_milliseconds);
 
 //		debug.c
 void	print_philos(const t_philo	*philos, size_t	count);

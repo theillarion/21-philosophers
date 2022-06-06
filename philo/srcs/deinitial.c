@@ -1,14 +1,5 @@
 #include "header.h"
 
-void	ft_smart_free(void	**memory)
-{
-	if (memory != NULL && *memory != NULL)
-	{
-		free(*memory);
-		*memory = NULL;
-	}
-}
-
 void	ft_destroy_mutexes(t_mutexes	**mutexes, size_t count)
 {
 	size_t	i;

@@ -1,5 +1,14 @@
 #include "header.h"
 
+void	ft_smart_free(void	**memory)
+{
+	if (memory != NULL && *memory != NULL)
+	{
+		free(*memory);
+		*memory = NULL;
+	}
+}
+
 bool	ft_smart_sleep(t_main	*env, const t_time	*time_last_eat,
 	size_t sleep_milliseconds)
 {
