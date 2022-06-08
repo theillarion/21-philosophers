@@ -5,7 +5,7 @@ void	ft_destroy_mutexes(t_mutexes	**mutexes, size_t count)
 	size_t	i;
 
 	if (mutexes == NULL || *mutexes == NULL)
-		return;
+		return ;
 	i = 0;
 	while (i < count)
 		pthread_mutex_destroy(&(*mutexes)->fork[i++]);
@@ -23,10 +23,10 @@ void	ft_destroy_mutexes(t_mutexes	**mutexes, size_t count)
 
 void	ft_deinitial_all(t_main	*env)
 {
-	size_t 	count;
+	size_t	count;
 
 	if (env == NULL)
-		return;
+		return ;
 	count = env->settings->count_philo;
 	while (!ft_my_empty(&env->queue))
 		ft_pop(&env->queue);

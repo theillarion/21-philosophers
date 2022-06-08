@@ -1,6 +1,6 @@
 #include "header.h"
 
-void	ft_swap(size_t 	*elem1, size_t	*elem2)
+void	ft_swap(size_t	*elem1, size_t	*elem2)
 {
 	size_t	temp;
 
@@ -9,7 +9,8 @@ void	ft_swap(size_t 	*elem1, size_t	*elem2)
 	*elem2 = temp;
 }
 
-void	ft_fill_philos(t_philo	**philos, size_t	count_philos, size_t count_iter)
+void	ft_fill_philos(t_philo	**philos, size_t count_philos,
+			size_t count_iter)
 {
 	size_t	i;
 
@@ -23,7 +24,8 @@ void	ft_fill_philos(t_philo	**philos, size_t	count_philos, size_t count_iter)
 	{
 		(*philos)[i].id = i;
 		(*philos)[i].is_infinity = count_iter == 0;
-		(*philos)[i].count_iteration = count_iter + (size_t)(*philos)[i].is_infinity;
+		(*philos)[i].count_iteration = count_iter
+			+ (size_t)(*philos)[i].is_infinity;
 		(*philos)[i].right_fork = i;
 		if (i != 0)
 			philos[0][i].left_fork = i - 1;
@@ -38,10 +40,10 @@ void	ft_fill_philos(t_philo	**philos, size_t	count_philos, size_t count_iter)
 void	ft_fill_status(t_status	**status)
 {
 	if (status == NULL)
-		return;
+		return ;
 	*status = (t_status *)malloc(sizeof(**status));
 	if (*status == NULL)
-		return;
+		return ;
 	(*status)->is_die = false;
 	(*status)->id = 0;
 }
@@ -51,13 +53,14 @@ void	ft_fill_mutexes(t_mutexes	**mutexes, size_t count)
 	size_t	i;
 
 	if (mutexes == NULL)
-		return;
+		return ;
 	*mutexes = (t_mutexes *)malloc(sizeof(**mutexes));
 	if (*mutexes == NULL)
-		return;
-	(*mutexes)->fork = (pthread_mutex_t *)malloc(count * sizeof(*(*mutexes)->fork));
+		return ;
+	(*mutexes)->fork = (pthread_mutex_t *)malloc(count
+			* sizeof(*(*mutexes)->fork));
 	if ((*mutexes)->fork == NULL)
-		return;
+		return ;
 	i = 0;
 	while (i < count)
 		pthread_mutex_init(&(*mutexes)->fork[i++], NULL);
@@ -90,12 +93,12 @@ void	ft_fill_queue(t_queue	**queue, size_t count)
 
 bool	ft_fill(t_main	**env, t_settings	*settings)
 {
-	pthread_t 	*threads;
+	pthread_t	*threads;
 	t_philo		*philos;
 	t_status	*status;
-	t_mutexes		*mutexes;
-	t_queue 		*queue;
-	size_t 		i;
+	t_mutexes	*mutexes;
+	t_queue		*queue;
+	size_t		i;
 
 	if (env == NULL || settings == NULL || settings->count_philo < 1)
 		return (false);

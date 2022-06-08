@@ -1,9 +1,10 @@
 #include "header.h"
 
-t_u64int	ft_get_difference_time_ms(const t_time	*time1, const t_time	*time2)
+t_u64int	ft_get_difference_time_ms(const t_time	*time1,
+	const t_time	*time2)
 {
 	return ((t_u64int)(time2->tv_sec * 1000 + (time2->tv_usec / 1000))
-			 - (t_u64int)(time1->tv_sec * 1000 + (time1->tv_usec / 1000)));
+		- (t_u64int)(time1->tv_sec * 1000 + (time1->tv_usec / 1000)));
 }
 
 t_u64int	ft_get_difference_time_now_ms(const t_time	*time)
@@ -11,10 +12,10 @@ t_u64int	ft_get_difference_time_now_ms(const t_time	*time)
 	t_time	time_current;
 
 	gettimeofday(&time_current, NULL);
-	return ft_get_difference_time_ms(time, &time_current);
+	return (ft_get_difference_time_ms(time, &time_current));
 }
 
-t_time ft_get_now_time()
+t_time	ft_get_now_time(void)
 {
 	t_time	result;
 

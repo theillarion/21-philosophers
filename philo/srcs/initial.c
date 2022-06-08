@@ -3,7 +3,7 @@
 void	ft_initial_env(t_main	*env)
 {
 	if (env == NULL)
-		return;
+		return ;
 	env->settings = NULL;
 	env->adrs_threads = NULL;
 	env->adrs_philo = NULL;

@@ -5,7 +5,7 @@
 
 //	!!!	FORBIDDEN FUNCTION !!!
 
-void	ft_check_result(t_main	*env, int	code)
+void	ft_check_result(t_main	*env, int code)
 {
 	if (code < 0)
 	{

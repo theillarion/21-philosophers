@@ -30,7 +30,7 @@ bool	ft_read_args(t_settings	*settings, size_t argc, const char	**argv)
 	i = 0;
 	while (i < argc)
 		if (!ft_validation(argv[i++]))
-			return false;
+			return (false);
 	settings->count_philo = ft_atoi(argv[0]);
 	settings->time_to_die = ft_atoi(argv[1]);
 	settings->time_to_eat = ft_atoi(argv[2]);

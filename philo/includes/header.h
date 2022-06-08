@@ -10,8 +10,8 @@
 # include <pthread.h>
 # include "../libs/queue/includes/queue.h"
 
-typedef struct timeval t_time;
-typedef unsigned long long t_u64int;
+typedef struct timeval		t_time;
+typedef unsigned long long	t_u64int;
 
 typedef struct s_philo
 {
@@ -34,13 +34,13 @@ typedef struct s_settings
 	bool	is_end;
 }			t_settings;
 
-typedef	struct s_status
+typedef struct s_status
 {
 	bool			is_die;
 	size_t			id;
 }					t_status;
 
-typedef	struct s_mutexes
+typedef struct s_mutexes
 {
 	pthread_mutex_t	queue;
 	pthread_mutex_t	death;
@@ -60,62 +60,64 @@ typedef struct s_main
 }					t_main;
 
 //			time.c
-t_u64int	ft_get_difference_time_ms(const struct timeval	*time1, const struct timeval	*time2);
+t_u64int	ft_get_difference_time_ms(const t_time	*time1,
+				const t_time	*time2);
 t_u64int	ft_get_difference_time_now_ms(const t_time	*time);
-t_time		ft_get_now_time();
+t_time		ft_get_now_time(void);
 t_time		ft_copy_time(const t_time	*src);
 
 //		utilities.c
-void	ft_smart_free(void	**memory);
-bool	ft_smart_sleep(t_main	*env, size_t sleep_milliseconds);
+void		ft_smart_free(void	**memory);
+bool		ft_smart_sleep(t_main	*env, size_t sleep_milliseconds);
 
 //		utilities_queue.c
-void	ft_my_push(t_queue	**queue, size_t philo_id);
-size_t	ft_my_top(t_queue	**queue);
-bool	ft_my_empty(t_queue	**queue);
+void		ft_my_push(t_queue	**queue, size_t philo_id);
+size_t		ft_my_top(t_queue	**queue);
+bool		ft_my_empty(t_queue	**queue);
 
-//		print.c
-void	ft_print_info(t_main	*env, const char	*event,
-			const char	*color);
-void	ft_print_died(t_main	*env);
+//			print.c
+void		ft_print_info(t_main	*env, const char	*event,
+				const char	*color);
+void		ft_print_died(t_main	*env);
 
-//		debug.c
-void	print_philos(const t_philo	*philos, size_t	count);
-void	print_settings(const t_settings	*settings);
-void	print_main(const t_main	*main);
+//			debug.c
+void		print_philos(const t_philo	*philos, size_t	count);
+void		print_settings(const t_settings	*settings);
+void		print_main(const t_main	*main);
 
-//		utilities_int.c
-int		ft_isdigit(int symbol);
-int		ft_atoi(const char	*str);
+//			utilities_int.c
+int			ft_isdigit(int symbol);
+int			ft_atoi(const char	*str);
 
-//		utilities_string.c
-size_t	ft_strlen(const char	*str);
-int		ft_strncmp(const char	*str1, const char	*str2, size_t n);
+//			utilities_string.c
+size_t		ft_strlen(const char	*str);
+int			ft_strncmp(const char	*str1, const char	*str2, size_t n);
 
-//		exit.c
-void	ft_fail(t_main	*env, const char	*message_error, bool	is_clean);
-void	ft_success(t_main	*env);
+//			exit.c
+void		ft_fail(t_main	*env, const char	*message_error,
+				bool is_clean);
+void		ft_success(t_main	*env);
 
-//		fill.c
-bool	ft_fill(t_main	**main, t_settings	*settings);
+//			fill.c
+bool		ft_fill(t_main	**main, t_settings	*settings);
 
-//		initial.c
-void	ft_initial_env(t_main	*env);
+//			initial.c
+void		ft_initial_env(t_main	*env);
 
-//		deinitial.c
-void	ft_smart_free(void	**memory);
-void	ft_deinitial_all(t_main	*_main);
+//			deinitial.c
+void		ft_smart_free(void	**memory);
+void		ft_deinitial_all(t_main	*_main);
 
-//		action.c
-void	*main_action(void	*data);
+//			action.c
+void		*main_action(void	*data);
 
-//		validation.c
-bool	ft_read_args(t_settings	*settings, size_t argc, const char	**argv);
+//			validation.c
+bool		ft_read_args(t_settings	*settings, size_t argc, const char	**argv);
 
-//		check.c
-void	ft_check_result(t_main	*env, int	code);
+//			check.c
+void		ft_check_result(t_main	*env, int code);
 
-//		main.c
-int		main(int argc, char	**argv);
+//			main.c
+int			main(int argc, char	**argv);
 
 #endif

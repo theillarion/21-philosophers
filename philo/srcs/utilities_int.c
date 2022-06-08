@@ -30,7 +30,7 @@ static int	ft_get_number(const char	*str, int sign)
 		&& (len > 19 || (len == 19 && ft_strncmp(new_str, LONG_MAX, len) >= 0)))
 		return (-1);
 	else if (sign == -1
-			 && (len > 19 || (len == 19 && ft_strncmp(new_str, LONG_MIN, len) >= 0)))
+		&& (len > 19 || (len == 19 && ft_strncmp(new_str, LONG_MIN, len) >= 0)))
 		return (0);
 	i = 0;
 	while (ft_isdigit(str[i]))
