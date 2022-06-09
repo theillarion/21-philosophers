@@ -1,4 +1,8 @@
-[submodule "philo/lib/queue"]
-	path = philo/lib/queue
+[submodule "philo/libs/queue"]
+	path = philo/libs/queue
+	url = https://github.com/theillarion/lib-queue-c.git
+	branch = master
+[submodule "philo_solution_2/lib/queue"]
+	path = philo_solution_2/lib/queue
 	url = https://github.com/theillarion/lib-queue-c.git
 	branch = master

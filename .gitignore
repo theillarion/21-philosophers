@@ -3,6 +3,7 @@
 
 #	Not ignore certain files/folders
 !philo/
+!philo_solution_2/
 !.gitignore
 !Makefile
 !*.h
