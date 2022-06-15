@@ -68,13 +68,15 @@ void	ft_fill_mutexes(t_mutexes	**mutexes, size_t count)
 	pthread_mutex_init(&(*mutexes)->all_forks, NULL);
 	pthread_mutex_init(&(*mutexes)->print, NULL);
 	pthread_mutex_init(&(*mutexes)->death, NULL);
+	pthread_mutex_init(&(*mutexes)->count_ate, NULL);
 }
 
-void	ft_fill_queue(t_queue	**queue, size_t count)
+void	ft_fill_queue(t_queue	**queue, t_queue	**queue2, size_t count)
 {
 	size_t	i;
 
 	ft_init(queue, sizeof(size_t));
+	ft_init(queue2, sizeof(size_t));
 	i = 0;
 	while (i < count)
 	{
@@ -89,6 +91,21 @@ void	ft_fill_queue(t_queue	**queue, size_t count)
 			ft_my_push(queue, i);
 		++i;
 	}
+	ft_copy((const t_queue **)queue, queue2);
+}
+void	ft_fill_stats_eat(t_stats_eat	**status_eat, size_t	count)
+{
+	if (status_eat == NULL)
+		return ;
+	*status_eat = (t_stats_eat *)malloc(sizeof(**status_eat));
+	if (*status_eat == NULL)
+		return ;
+	(*status_eat)->philo_eat = (bool *)malloc(count * sizeof(*(*status_eat)->philo_eat));
+	if ((*status_eat)->philo_eat == NULL)
+		return ;
+	memset((*status_eat)->philo_eat, 0, count * sizeof(*(*status_eat)->philo_eat));
+	(*status_eat)->count_ate = 0;
+	(*status_eat)->count_all = count;
 }
 
 bool	ft_fill(t_main	**env, t_settings	*settings)
@@ -98,26 +115,31 @@ bool	ft_fill(t_main	**env, t_settings	*settings)
 	t_status	*status;
 	t_mutexes	*mutexes;
 	t_queue		*queue;
+	t_queue		*queue2;
+	t_stats_eat	*status_eat;
 	size_t		i;
 
 	if (env == NULL || settings == NULL || settings->count_philo < 1)
 		return (false);
 	settings->is_end = false;
-	ft_fill_queue(&queue, settings->count_philo);
+	ft_fill_queue(&queue, &queue2, settings->count_philo);
 	ft_fill_mutexes(&mutexes, settings->count_philo);
 	ft_fill_philos(&philos, settings->count_philo, settings->count_eat);
 	ft_fill_status(&status);
+	ft_fill_stats_eat(&status_eat, settings->count_philo);
 	threads = (pthread_t *)malloc(settings->count_philo * sizeof(*threads));
 	*env = (t_main *)malloc(settings->count_philo * sizeof (**env));
 	if (threads == NULL || *env == NULL || philos == NULL || status == NULL
-		|| mutexes == NULL)
+		|| mutexes == NULL || status_eat == NULL)
 		return (false);
 	i = 0;
 	while (i < settings->count_philo)
 	{
 		(*env)[i].settings = settings;
 		(*env)[i].status = status;
+		(*env)[i].stats_eat = status_eat;
 		(*env)[i].queue = queue;
+		(*env)[i].orig_queue = queue2;
 		(*env)[i].mutexes = mutexes;
 		(*env)[i].adrs_threads = threads;
 		(*env)[i].adrs_philo = &philos[i];

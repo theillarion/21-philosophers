@@ -1,5 +1,32 @@
 #include "header.h"
 
+void	ft_set_all(t_main	*env, bool set_flag)
+{
+	size_t	i;
+
+	if (env == NULL)
+		return ;
+	i = 0;
+	while (i < env->stats_eat->count_all)
+		env->stats_eat->philo_eat[i++] = set_flag;
+}
+
+void	ft_add_stats_eat(t_main	*env)
+{
+	if (env == NULL)
+		return ;
+	ft_check_result(env, pthread_mutex_lock(&env->mutexes->count_ate));
+	env->stats_eat->philo_eat[env->adrs_philo->id] = true;
+	++env->stats_eat->count_ate;
+	if (env->stats_eat->count_ate == env->stats_eat->count_all)
+	{
+		env->stats_eat->count_ate = 0;
+		memset(env->stats_eat->philo_eat, 0, env->settings->count_philo
+			* sizeof(*env->stats_eat->philo_eat));
+	}
+	ft_check_result(env, pthread_mutex_unlock(&env->mutexes->count_ate));
+}
+
 bool	ft_die(t_main	*env)
 {
 	if (env == NULL)
@@ -54,8 +81,8 @@ bool	ft_get_fork(t_main	*env, bool is_first_fork)
 					&env->mutexes->fork[env->adrs_philo->left_fork]));
 		ft_check_result(env, pthread_mutex_unlock(
 				&env->mutexes->fork[env->adrs_philo->right_fork]));
-		ft_check_result(env, pthread_mutex_unlock(&env->mutexes->all_forks));
-		ft_check_result(env, pthread_mutex_unlock(&env->mutexes->queue));
+		//ft_check_result(env, pthread_mutex_unlock(&env->mutexes->all_forks));
+		//ft_check_result(env, pthread_mutex_unlock(&env->mutexes->queue));
 		return (false);
 	}
 	return (true);
@@ -83,21 +110,22 @@ bool	ft_check_death(t_main	*env, pthread_mutex_t	*mutex1,
 
 bool	ft_get_forks(t_main	*env)
 {
-	if (!ft_check_death(env, &env->mutexes->queue, NULL))
+	if (!ft_check_death(env, /*&env->mutexes->queue*/NULL, NULL))
 		return (false);
-	ft_pop(&env->queue);
-	ft_check_result(env, pthread_mutex_lock(&env->mutexes->all_forks));
+	//ft_pop(&env->queue);
+	//ft_check_result(env, pthread_mutex_lock(&env->mutexes->all_forks));
 	if (!ft_get_fork(env, true))
 		return (false);
 	if (!ft_get_fork(env, false))
 		return (false);
-	ft_check_result(env, pthread_mutex_unlock(&env->mutexes->all_forks));
-	ft_my_push(&env->queue, env->adrs_philo->id);
-	ft_check_result(env, pthread_mutex_unlock(&env->mutexes->queue));
+	//ft_check_result(env, pthread_mutex_unlock(&env->mutexes->all_forks));
+	//ft_my_push(&env->queue, env->adrs_philo->id);
+	//ft_check_result(env, pthread_mutex_unlock(&env->mutexes->queue));
 	ft_print_info(env, "is eating", "\033[92m");
 	env->adrs_philo->time_last_eat = ft_get_now_time();
 	if (!ft_smart_sleep(env, env->settings->time_to_eat))
 		ft_die(env);
+	ft_add_stats_eat(env);
 	ft_check_result(env, pthread_mutex_unlock(
 			&env->mutexes->fork[env->adrs_philo->left_fork]));
 	ft_check_result(env, pthread_mutex_unlock(
@@ -126,18 +154,15 @@ bool	ft_eat(t_main	*arg)
 	{
 		if (ft_is_died(arg))
 			return (ft_die(arg));
-		ft_check_result(arg, pthread_mutex_lock(&arg->mutexes->queue));
-		if (ft_my_top(&arg->queue) == arg->adrs_philo->id
-			&& arg->settings->count_philo > 1)
-			return (ft_get_forks(arg));
-		else if (ft_my_empty(&arg->queue))
+		ft_check_result(arg, pthread_mutex_lock(&arg->mutexes->count_ate));
+		if (arg->stats_eat->philo_eat[arg->adrs_philo->id] == false)
 		{
-			ft_check_result(arg, pthread_mutex_unlock(&arg->mutexes->queue));
-			return (false);
+			ft_check_result(arg, pthread_mutex_unlock(&arg->mutexes->count_ate));
+			return (ft_get_forks(arg));
 		}
 		else
 		{
-			ft_check_result(arg, pthread_mutex_unlock(&arg->mutexes->queue));
+			ft_check_result(arg, pthread_mutex_unlock(&arg->mutexes->count_ate));
 			usleep(100);
 			continue ;
 		}
@@ -164,6 +189,8 @@ void	*main_action(void	*data)
 	arg->adrs_philo->time_last_eat = ft_get_now_time();
 	while (arg->adrs_philo->count_iteration)
 	{
+		if (arg->adrs_philo->id % 2 != 0)
+			usleep(100);
 		if (!ft_think(arg) || !ft_eat(arg) || !ft_sleep(arg))
 			return (NULL);
 		if (!arg->adrs_philo->is_infinity)

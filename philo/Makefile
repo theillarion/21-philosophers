@@ -13,7 +13,7 @@ LIB_PATH		=	libs/queue/
 LIB				=	$(LIB_PATH)$(LIB_NAME)
 LIB_D			=	$(LIB_PATH)$(LIB_NAME_D)
 
-LINK		=	-lpthread# -fsanitize=thread
+LINK		=	-lpthread -fsanitize=thread
 LINK_LIB	=	-l$(LIB_NAME_S) -L$(LIB_PATH)
 LINK_LIB_D	=	-l$(LIB_NAME_S_D) -L$(LIB_PATH)
 

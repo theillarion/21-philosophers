@@ -10,4 +10,6 @@ void	ft_initial_env(t_main	*env)
 	env->status = NULL;
 	env->mutexes = NULL;
 	env->queue = NULL;
+	env->stats_eat = NULL;
+	env->orig_queue = NULL;
 }

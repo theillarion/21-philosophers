@@ -21,6 +21,7 @@ typedef struct s_philo
 	t_time	time_last_eat;
 	size_t	count_iteration;
 	bool	is_infinity;
+	bool	is_ate;
 }			t_philo;
 
 typedef struct s_settings
@@ -47,7 +48,21 @@ typedef struct s_mutexes
 	pthread_mutex_t	print;
 	pthread_mutex_t	all_forks;
 	pthread_mutex_t	*fork;
+	pthread_mutex_t	count_ate;
 }					t_mutexes;
+
+typedef struct s_map
+{
+	size_t	id;
+	bool	is_ate;
+}	t_map;
+
+typedef struct s_stats_eat
+{
+	bool	*philo_eat;
+	size_t	count_ate;
+	size_t	count_all;
+}	t_stats_eat;
 
 typedef struct s_main
 {
@@ -57,6 +72,8 @@ typedef struct s_main
 	t_settings		*settings;
 	t_mutexes		*mutexes;
 	t_queue			*queue;
+	t_queue			*orig_queue;
+	t_stats_eat		*stats_eat;
 }					t_main;
 
 //			time.c
